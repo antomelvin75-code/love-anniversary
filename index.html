@@ -23,12 +23,12 @@
       --grad-hero: linear-gradient(160deg, #2a0845 0%, #6441a5 35%, #e2192c 75%, #ff6fa5 100%);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; -webkit-text-size-adjust: 100%; }
     body {
       font-family: 'Poppins', sans-serif;
       color: var(--ink);
       background: var(--cream);
-      overflow-x: hidden;
+      overflow-x: hidden; overflow-x: clip; -webkit-tap-highlight-color: transparent;
     }
     body.locked { overflow: hidden; }
     img { display: block; max-width: 100%; }
@@ -90,7 +90,7 @@
 
     /* ---------- Hero ---------- */
     .hero {
-      min-height: 100vh; display: grid; place-items: center; text-align: center; color: #fff;
+      min-height: 100vh; min-height: 100svh; display: grid; place-items: center; text-align: center; color: #fff;
       background: var(--grad-hero); overflow: hidden; padding: 100px 0 80px;
     }
     .hero::before {
@@ -108,7 +108,7 @@
     .hero-content { position: relative; z-index: 2; }
     .hero .tag {
       display: inline-block; padding: 8px 18px; border-radius: 99px;
-      background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
+      background: rgba(255,255,255,.15); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
       font-size: .85rem; letter-spacing: .1em;
     }
     .hero h1 { font-size: clamp(3.6rem, 12vw, 7.5rem); line-height: 1; margin: 18px 0 6px; text-shadow: 0 6px 30px rgba(0,0,0,.3); }
@@ -264,11 +264,11 @@
     }
     .flip.on .flip-inner { transform: rotateY(180deg); }
     .flip-face {
-      position: absolute; inset: 0; border-radius: 20px; backface-visibility: hidden;
+      position: absolute; inset: 0; border-radius: 20px; -webkit-backface-visibility: hidden; backface-visibility: hidden;
       display: grid; place-items: center; text-align: center; padding: 20px;
     }
     .flip-front {
-      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(6px);
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
       font-size: 2.6rem;
     }
     .flip-front small { display: block; font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; margin-top: 8px; }
@@ -444,6 +444,50 @@
       .g-item.tall { grid-row: span 1; }
       .g-item.wide { grid-column: span 1; }
     }
+    /* Phones: tighter spacing, no sideways slide-ins, no stuck hover states */
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 32px); }
+      .hero { padding: 70px 0 50px; }
+      .hero h1 { font-size: clamp(3rem, 15vw, 4.2rem); }
+      .hero .names { font-size: 1.3rem; }
+      .hero .date { font-size: .9rem; }
+      .couple-frame { width: min(270px, 72vw); margin-top: 32px; }
+      .couple-frame .ring { inset: -14px; }
+      .couple-frame .badge { width: 56px; height: 56px; font-size: 1.6rem; }
+      .couple-frame .photo.split::after { width: 38px; height: 38px; font-size: 1.1rem; }
+      .web { width: 160px; }
+      .title { font-size: clamp(2.2rem, 10vw, 2.8rem); }
+      .lead { font-size: .95rem; }
+      .counter-wrap { gap: 12px; }
+      .count-box { padding: 20px 8px; border-radius: 18px; }
+      .letter { padding: 36px 20px 28px; margin-top: 30px; }
+      .letter::after { font-size: 2.4rem; top: -20px; right: 16px; }
+      .letter .greet { font-size: 2rem; }
+      #typed { font-size: 1rem; line-height: 30px; min-height: 0; }
+      .letter { background-image: repeating-linear-gradient(180deg, transparent 0 29px, #ffe0ea 29px 30px); }
+      .letter .sign { font-size: 1.7rem; }
+      .gallery { gap: 14px; margin-top: 30px; }
+      .t-item.reveal:nth-child(odd), .t-item.reveal:nth-child(even) { transform: translateY(40px); }
+      .t-item.reveal.in { transform: none; }
+      .t-card { padding: 18px; }
+      .t-card h3 { font-size: 1.15rem; }
+      .flip-front { font-size: 2.2rem; }
+      .big-heart { width: 120px; height: 120px; font-size: 5.5rem; margin: 20px auto; }
+      .final .msg { font-size: 2.6rem; }
+      .music-btn { width: 46px; height: 46px; right: 14px; bottom: 14px; font-size: 1.1rem; }
+      .envelope { width: 220px; height: 146px; }
+      .envelope::before, .envelope::after { border-left-width: 110px; border-right-width: 110px; }
+      .envelope::before { border-top-width: 82px; }
+      .envelope::after { border-bottom-width: 82px; }
+      .seal { top: 56px; }
+    }
+    /* Touch screens: hover lifts would stick after a tap, so turn them off */
+    @media (hover: none) {
+      .g-item.reveal.in:hover, .count-box:hover, .t-card:hover { transform: none; }
+      .g-item:hover::after { transform: translateX(-120%); }
+    }
+    .flip-inner { -webkit-transform-style: preserve-3d; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
       .hero-content > * { opacity: 1; }
@@ -623,7 +667,7 @@
           <div class="flip-face flip-back"><div><b>Your smile</b>It turns my worst days into the best ones.</div></div>
         </div></div>
         <div class="flip reveal"><div class="flip-inner">
-          <div class="flip-face flip-front"><div>🫶<small>Reason 2</small></div></div>
+          <div class="flip-face flip-front"><div>💗<small>Reason 2</small></div></div>
           <div class="flip-face flip-back"><div><b>Your kindness</b>You care for everyone, and it makes me want to be better.</div></div>
         </div></div>
         <div class="flip reveal"><div class="flip-inner">
